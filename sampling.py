@@ -4,10 +4,9 @@ import random
 import math
 from matplotlib import pyplot as plt 
 
-def f(x):
-    ''' Modello da fittare: esponenziale.
-    '''
-    return np.exp(-x)
+''' La funzione time.time() fornisce il numero di secondi 
+    trascorsi dal 1° gennaio 1970, come nel C.
+'''
 
 def dumb_sampling(size):
     ''' Campionamento con il metodo del rigetto
@@ -21,14 +20,17 @@ def dumb_sampling(size):
         x = 5 * random.random()
         y = random.random()
         chiamate +=1
-        if y < f(x):
+        if y < math.exp(-x):
             xdata.append(x)
             pdf.append(y) 
             conta += 1
     
-    plt.figure('Dumb sampling. Elapses time: {:.3f}'.format(time.time() - t0))
+    plt.figure()
+    plt.title('Dumb sampling. Elapses time: {:.3f} s'.format(time.time() - t0))
     plt.hist(xdata, bins=50, density=True)
-    print(chiamate)
+    plt.xlabel('x')
+    plt.ylabel('pdf(x)')
+    print(f'Numero di chiamate alla funzione random.random(): {chiamate}')
 
 def right_sampling(size):
     ''' Campionamento con il metodo di inversione.
@@ -37,27 +39,36 @@ def right_sampling(size):
     pdf = []
     conta = 0
     while conta < size:
-        y = - np.log(random.random())
+        y = - math.log(random.random())
         if y < 5:
             pdf.append(y)
             conta +=1
-    plt.figure('Right sampling. Elapses time: {:.3f}'.format(time.time() - t0))
+    plt.figure()
+    plt.title('Right sampling. Elapses time: {:.3f} s'.format(time.time() - t0))
     plt.hist(pdf, bins=50, density=True)
+    plt.xlabel('x')
+    plt.ylabel('pdf(x)')
 
 def vectorized_sampling(size):
     ''' Campionamento con il metodo di inversione, vettorizzato
     '''
     t0 = time.time()
     pdf = - np.log(np.random.uniform(size=size))
-    plt.figure('Right sampling. Elapses time: {:.6f}'.format(time.time() - t0))
-    plt.hist(pdf, bins=50, density=True)
+    plt.figure()
+    plt.title('Right sampling. Elapses time: {:.3f}'.format(time.time() - t0))
+    plt.hist(pdf, bins=80, density=True)
+    plt.xlabel('x')
+    plt.ylabel('pdf(x)')
+    plt.xlim(-0.5, 6)
     
 
 if __name__ == '__main__':
+    n = 100000
     random.seed(7)
+    dumb_sampling(n)
+    random.seed(7)
+    right_sampling(n)
     np.random.seed(7)
-    dumb_sampling(100000)
-    right_sampling(100000)
-    vectorized_sampling(100000)
+    vectorized_sampling(n)
     plt.show()
 
