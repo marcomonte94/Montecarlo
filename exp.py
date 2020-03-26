@@ -21,6 +21,7 @@ chi2 = sum(((y_data[mask] - model(x_data[mask], *popt)) / np.sqrt(y_data[mask]))
 nu = mask.sum() - 3
 sigma = np.sqrt(2 * nu)
 print("{:.3f}, {:.3f}, {:.3f}".format(chi2, nu, sigma))
+print(chi2/(len(x_data)-len(popt)))
 
 plt.plot(x_data, model(x_data, *popt), color='r')
 plt.show()
