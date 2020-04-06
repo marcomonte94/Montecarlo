@@ -27,9 +27,9 @@ gvalue = np.zeros(nstu)   #for each student a  meausured g  is returned
 
 nmeas= 10  #Measurements for each length
 dt = 0.01   #Human resolution on reaction time (0.1 s Divided by 10!)(Seconds)
-dl = 0.0   # Error on pendulum length
+dl = 0.01   # Error on pendulum length
 thetamin = 0/57.3    #Minimum Theta in radiant
-thetamax = 0/57.3 #MAximum Theta in radiant
+thetamax = 5/57.3 #MAximum Theta in radiant
 lgen = [.1,.2,.3,.4,.5,.6,.7,.8,.9,1.]     #Pendulum length  (m)
 
 tgen = np.zeros((len(lgen),nmeas),dtype=float)
@@ -54,7 +54,7 @@ while ist < nstu:
                 a = a*(1+theta*theta/16)    #Non perfect isochronism
                 a = a+dt*np.random.normal() #gaussian smearing for resolution
                 r = np.random.uniform()
-#                if r<0.66 : a = 0.9*a        #BAD counting simulation
+                if r<0.66 : a = 0.9*a        #BAD counting simulation
                 tgen[ilen][imeas] =a
 
 # 3)    RECONSTRUCTION PART  (HERE SIMULATION OF WHAT STUDENT DO  )
