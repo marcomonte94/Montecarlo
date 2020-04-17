@@ -27,6 +27,7 @@ def f(x, a):
 def no_isochronism(t):
     theta = theta = thetamin +(thetamax-thetamin)*np.random.uniform()
     t *= (1 + (theta ** 2) / 16)
+    
 
 def bad_counting(t, prob):
         r = random.random()
@@ -59,10 +60,13 @@ def experiment(stud, inertia=False):
             no_isochronism(Tmeas)
 
         if stud.distract:
+            print(Tmeas)
             '''The student is distracted -> he makes
                 wrong oscillation counting 
             '''
             bad_counting(Tmeas, 1)
+            print(Tmeas)
+            print('\n')
 
         if inertia:
             inerzia(Tmeas, lmis, 0.03)
@@ -108,5 +112,8 @@ def make_histo(occ, bins, results, description, color):
 
 
 if __name__ == '__main__':
+    t = 7
+    no_isochronism(t)
+    print(t)
     print('Eh, voleeevi!')
     

@@ -1,10 +1,10 @@
 import pendulum
-import numpy as np 
-from matplotlib import pyplot as plt 
+import numpy as np
+from matplotlib import pyplot as plt
 
 
 np.random.seed(3141456242)   # random seed
-nstud = 5000
+nstud = 1
 grec, chi2 = np.zeros(nstud), np.zeros(nstud)
 
 plt.figure()
