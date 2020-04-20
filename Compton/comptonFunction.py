@@ -35,16 +35,5 @@ def xRotation(pin, angle):
     return np.dot(r_matrix, pin)
 
 
-def photonCompton(pin):
-    '''Funzione che seleziona energia e angolo di scattering dalla distribuzione
-        di K.N., e determina le componenti del quadrimpulso di uscita
-        tramite la matrice di scattering.
-    '''
-    e_out, psi = SamplingKleinNishina(pin[0]) #energia e angolo di scattering
-    p_out = scatteringMatrix(pin, e_out, psi) #4-impulso dopo scattering
-    return p_out
-
-
-
 if __name__ == '__main__':
     print('Funzioni da utilizzare per la simulazione dello scattering Compton.')

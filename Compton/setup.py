@@ -29,7 +29,7 @@ class Detector:
         else: return False
 
     def check_energy(self, pin, pout):
-        ''' Metodo che verifica che l'energia depositata 
+        ''' Metodo che verifica che l'energia depositata
             dall'elettrone scatterato superi la soglia
             per poter dare il trigger
         '''
@@ -44,36 +44,20 @@ class Detector:
             return True
         else: return False
 
-    def scattering(self, prob=0):
-        ''' Metodo che valuta la probabilità di scattering
-            preliminare del fotone nel collimatore
+    def detect_photon(self, p):
+        ''' Metodo che misura il quadrimpulso del fotone scatterato
         '''
-        r = random.random()
-        if r < prob:
-            return True
-        else: return False
-
-    def acquirePhoton(self, p_in, scatter):
-        ''' Metodo che acquisisce il quadrimpulso del fotone scatterato
-            valutando anche il suo eventuale scattering preliminare
-        '''
-        p_1 = comptonFunction.photonCompton(p_in)
-        if scatter:
-            p_out = comptonFunction.photonCompton(p_1)
-        else:
-            p_out = p_1
-            p_1 = p_in
-
+        eout, psi = comptonFunction.SamplingKleinNishina(p[0])
+        pout = comptonFunction.scatteringMatrix(p, eout, psi)
         r = np.random.uniform()
         if r < 0.5:
             phi = 0
         else:
             phi = np.pi
-        p_out = comptonFunction.xRotation(p_out, phi)
+        pout = comptonFunction.xRotation(pout, phi)
+        return pout
 
-        return p_1, p_out
-
-    def angularSampling(self, p):
+    def acquireAngle(self, p):
         '''Metodo che calcola l'angolo (theta) che viene
             misurato dal secondo rivelatore.
         '''
@@ -83,7 +67,7 @@ class Detector:
         theta_meas = theta + np.random.uniform()*self.dtheta
         return theta_meas
 
-    def energySampling(self, p):
+    def acquireEnergy(self, p):
         ''' Metodo che calcola l'energia depositata dal fotone
             nel rivelatore, che serivrà per costruirne lo spettro
         '''
@@ -98,13 +82,6 @@ class Detector:
         emeas = emeas+ r*self.en_resolution*np.sqrt(emeas)
         return emeas
 
+
 if __name__ == '__main__':
     print('Definizione del rivelatore e delle sue caratteristiche')
-
-
-
-
-
-
-
-

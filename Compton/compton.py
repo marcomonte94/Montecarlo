@@ -96,7 +96,7 @@ while isca < nsca:
     theta = theta*57.3 #conversion in degree
     r = np.random.uniform()
     theta_meas = theta + r*dtheta
-    if (np.abs(theta-0)>30): trigger=0
+    #if (np.abs(theta-0)>30): trigger=0
 #photon energy measured in NaI   resolution dE/E = +- 80%/sqrt(E)
 #Here try to simulate Compton Shoulder effect
     r = np.random.uniform()
@@ -116,7 +116,7 @@ while isca < nsca:
          isca = isca+1
 
 #   3) Plotting  Angle Distribution
-xout = energy
+xout = angle
 xmin = np.amin(xout)
 xmax = np.amax(xout)
 nbin =  50
