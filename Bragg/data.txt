@@ -1,0 +1,20 @@
+Energy: 50 MeV (Z = 8)
+Bragg peak position: 2.5045851163551758
+Bragg peak std: 0.027911876155271884
+
+Energy: 50 MeV (Z = 10)
+Bragg peak position: 2.00956189004952
+Bragg peak std: 0.022880929469411088
+
+Energy: 100 MeV
+Bragg peak position: 7.059343640535566
+Bragg peak std: 0.07238688342127392
+
+Energy: 200 MeV
+Bragg peak position: 22.034208613258652
+Bragg peak std: 0.17924583572891736
+
+Energy: 400 MeV
+Bragg peak position: 57.8186682073325
+Bragg peak std: 0.3005219614882548
+
