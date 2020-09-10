@@ -61,7 +61,7 @@ class Material:
         message += '- Atomic number = {}  \n'
         message += '- Atomic weight = {}  \n'
         message += '- Density = {} (g / cm^3 ) \n'
-        message += '- Ionization energy = {} Mev \n'
+        message += '- Ionization energy = {} MeV \n'
         return message.format(self.name, self.Z, self.A, self.density, self.I)
 
 if __name__ == '__main__':
