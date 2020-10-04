@@ -24,6 +24,7 @@ def circlefit(x,y, npoint):
    return  xcfit,ycfit,rfit
 
 
+
 def circle_simulation(xc, yc, r, npoint):
 
     ex,ey = 0.5, 0.5 # uncertainty
@@ -31,17 +32,64 @@ def circle_simulation(xc, yc, r, npoint):
     x,y = xc + r * np.cos(phi), yc + r * np.sin(phi)  # npoint coordinate generation
     dx, dy = np.random.uniform(-ex ,ex, npoint), np.random.uniform(-ey, ey, npoint)
     x, y = x + dx, y + dy
-    return circlefit(x, y, 10)  # Recostruction fit: xcfit, ycfit, rfit
+    return circlefit(x, y, npoint)  # Recostruction fit: xcfit, ycfit, rfit
+
+
+def circle_estimate(ncircle, npoint):
+
+    xc, yc = -2,-2 # center's coordinates
+    ex,ey = 0.5, 0.5 # uncertainty
+    r = 10 # circle's radius
+    all_r = np.zeros(ncircle)
+    diff = np.zeros(ncircle)
+
+    phi = 2*np.pi*np.random.uniform(0, 1, npoint)
+    x,y = xc + r * np.cos(phi), yc + r * np.sin(phi)
+
+    for icircle in range(ncircle):
+        _x, _y, _r = circle_simulation(xc, yc, r, npoint)
+        all_r[icircle] = _r
+        diff[icircle] = r - _r
+
+    #print(f'Raggio ricostruito {_r}')
+    r_mean = all_r.mean()
+    rms= np.std(diff)
+
+    return r_mean, rms
+    #print('Deviazione Standard =' ,rms)
 
 if __name__ == '__main__':
 
+
     ncircle = 100
-    xc, yc = -2,-2 # center's coordinates
-    r = 10 # circle's radius
-    diff = np.zeros(ncircle)
+    npoint = np.arange(10, 500, 10)
 
-    for icircle in range(ncircle):  
-        _x, _y, _r = circle_simulation(xc, yc, r, 10)
-        diff[icircle] = r - _r 
+    r_mean, rms = [], []
 
-    print(f'Raggio ricostruito {_r}')
+    def fitfunc(x, a, b):
+        return a / (x**b)
+
+
+    for i in npoint:
+        r_mean.append(circle_estimate(ncircle, i)[0])
+        rms.append(circle_estimate(ncircle, i)[1])
+
+    '''
+    plt.figure()
+    plt.xlim(-15,15)
+    plt.ylim(-15,15)
+    plt.errorbar(x, y, ex, ey, fmt='.', color='black', label =r'Generated point')
+    phi = np.linspace(0, 2*np.pi,1000)
+    rfit = np.mean(all_r)
+    xfit, yfit = xc + rfit * np.cos(phi), yc + rfit * np.sin(phi)
+    plt.plot(xfit,yfit, color='darkorange', linewidth=2.5, linestyle='solid', label=r' Best Fitting circle')
+    '''
+    popt, pcov = curve_fit(fitfunc, npoint, rms)
+    print(f'Fit param: {popt[0]}, {popt[1]}')
+    plt.figure()
+    plt.plot(npoint, rms, '.', color='black')
+    plt.plot(npoint, fitfunc(npoint, *popt))
+
+    plt.show()
+
+

@@ -52,8 +52,8 @@ class BetaSource:
         self.name = name
         self.Z = Z
         self.Emax = Emax
-        
-        
+
+
     def beta_spectrum(self, p):
 
         def fermi_function(p, Z_daughter):
@@ -65,8 +65,8 @@ class BetaSource:
         w = 1 + p.eKin / p.mass
         w0 = 1 + self.Emax / p.mass
         momentum = np.sqrt(w**2 - 1)
-        spectra = fermi_function(p, 8) * (p.momentum()/p.mass) * w * ((w0 - w)**2)
-    
+        spectra = fermi_function(p, self.Z-1) * (p.momentum()/p.mass) * w * ((w0 - w)**2)
+
         return spectra
 
 
@@ -101,16 +101,31 @@ if __name__ == '__main__':
 
     p = Particle('Positron', 511, +1)
 
-    plt.figure()
+    plt.figure(figsize=[7., 5.])
+    plt.rc('font', size=12)
     plt.title('Theoretical energy spectra')
+    plt.xlabel('Energy [keV]')
+    plt.ylabel('Counts [a.u]')
+    plt.ylim(0, 1.2)
+    plt.grid()
 
     F18 = BetaSource('Fluoro', 635, 9)
     p.eKin = np.linspace(0.1, F18.Emax, 1000)
-    plt.plot(p.eKin, F18.beta_spectrum(p))
+    plt.plot(p.eKin, F18.beta_spectrum(p)/max(F18.beta_spectrum(p)), color='red', label='$^{18}$F')
 
     C11 = BetaSource('Carbon', 970, 6)
     p.eKin = np.linspace(0.1, C11.Emax, 1000)
-    #plt.plot(p.eKin, C11.beta_spectrum(p)/sum(C11.beta_spectrum(p)))
+    plt.plot(p.eKin, C11.beta_spectrum(p)/max(C11.beta_spectrum(p)), color='lime', label='$^{11}$C')
+
+    N13 = BetaSource('Azoto', 1190, 7)
+    p.eKin = np.linspace(0.1, N13.Emax, 1000)
+    plt.plot(p.eKin, N13.beta_spectrum(p)/max(N13.beta_spectrum(p)), color='blue', label='$^{13}$N')
+
+    O15 = BetaSource('Ossigeno', 1720, 8)
+    p.eKin = np.linspace(0.1, O15.Emax, 1000)
+    plt.plot(p.eKin, O15.beta_spectrum(p)/max(O15.beta_spectrum(p)), color='cyan', label='$^{15}$O')
+
+    plt.legend(loc='best')
 
 
     plt.show()

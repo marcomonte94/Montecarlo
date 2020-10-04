@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 #CIRCLE FITTING SIMULATION
 #  Fitting Procedure
 def circlefit(x,y, npoint):
+
    xb,yb = np.mean(x),np.mean(y)    # getting the baricenter
    u,v = x-xb,y-yb                   #passing to (u,v) coordinate system
    su,suu,suuu = sum(u),sum(u**2),sum(u**3)     #terms involving u
@@ -28,20 +29,22 @@ def circlefit(x,y, npoint):
 if __name__ == '__main__':
    #  1)  Data simulation
 
-   ncircle = 100
+   ncircle = 10000
    diff = np.zeros(ncircle)
    icircle = 0
    while icircle < ncircle:
       xc,yc,r,ex,ey = -2,-2,10,0.5,0.5  # center coordinates x,y,radius, error on x, error on y
-      npoint = 30   # Number of point
-      phi = 2*np.pi*np.random.uniform(0,1,npoint)     # phi angle generation
+      npoint = 500   # Number of point
+      phi = np.pi*np.random.uniform(0,1,npoint)     # phi angle generation
       x,y = xc+r*np.cos(phi),yc+r*np.sin(phi)         # npoint coordinate generation
       dx,dy = np.random.uniform(-ex,ex,npoint),np.random.uniform(-ey,ey,npoint)
       x,y = x+dx,y+dy
-      xcfit,ycfit,rfit = circlefit(x,y)
+      xcfit,ycfit,rfit = circlefit(x,y, npoint)
       diff[icircle] = r-rfit                           #Store true - reconstructed difference
       icircle = icircle+1
 
+   plt.figure()
+   plt.hist(diff, bins=100)
    print('Media degli scarti = ', np.mean(diff))
    rms= np.std(diff)
    print('Deviazione Standard =' ,rms)
@@ -54,11 +57,12 @@ if __name__ == '__main__':
 
 
    #errorbar(x, y, yerr=None, xerr=None, fmt='', ecolor=None, elinewidth=None, capsize=None, barsabove=False, lolims=False, uplims=False, xlolims=False, xuplims=False, errorevery=1, capthick=None, *, data=None, **kwargs)
+   plt.figure()
    plt.xlim(-15,15)
    plt.ylim(-15,15)
    plt.errorbar(x,y,ex,ey, fmt='.', color='black', label =r'Generated point')
-   phi = t=np.linspace(0,2*np.pi,1000)
-   xfit,yfit = xc+rfit*np.cos(phi), yc+rfit*np.sin(phi)
+   phi = np.linspace(0,2*np.pi,1000)
+   xfit, yfit = xc + rfit * np.cos(phi), yc + rfit * np.sin(phi)
    plt.plot(xfit,yfit, color='darkorange', linewidth=2.5, linestyle='solid', label=r' Best Fitting circle')
 
    # Make the plot nicer
